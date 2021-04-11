@@ -24,6 +24,9 @@ class PhotoGalleryFragment : Fragment() {
             this,
             { galleryItems ->
                 Log.d(TAG, "Response received: $galleryItems")
+                galleryItems.forEach { item ->
+                    Log.d(TAG, "id: ${item.id}\turl: ${item.url}\ttitle: ${item.title}")
+                }
             }
         )
     }
