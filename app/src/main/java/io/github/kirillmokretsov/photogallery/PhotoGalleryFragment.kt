@@ -1,12 +1,11 @@
 package io.github.kirillmokretsov.photogallery
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -14,21 +13,15 @@ private const val TAG = "PhotoGalleryFragment"
 
 class PhotoGalleryFragment : Fragment() {
 
+    private lateinit var photoGalleryViewModel: PhotoGalleryViewModel
     private lateinit var photoRecyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val flickrLiveData: LiveData<List<GalleryItem>> = FlickrFetchr().fetchPhotos()
-        flickrLiveData.observe(
-            this,
-            { galleryItems ->
-                Log.d(TAG, "Response received: $galleryItems")
-                galleryItems.forEach { item ->
-                    Log.d(TAG, "id: ${item.id}\turl: ${item.url}\ttitle: ${item.title}")
-                }
-            }
-        )
+        photoGalleryViewModel =
+            ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
+                .get(PhotoGalleryViewModel::class.java)
     }
 
     override fun onCreateView(
