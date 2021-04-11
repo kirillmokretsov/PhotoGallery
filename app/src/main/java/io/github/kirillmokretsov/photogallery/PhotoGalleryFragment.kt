@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.github.kirillmokretsov.photogallery.api.FlickrApi
@@ -24,16 +25,13 @@ class PhotoGalleryFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val flickrHomePageRequest: Call<String> = flickrApi.fetchContents()
-        flickrHomePageRequest.enqueue(object : Callback<String> {
-            override fun onFailure(call: Call<String>, t: Throwable) {
-                Log.e(TAG, "Failed to fetch photos", t)
+        val flickrLiveData: LiveData<String> = FlickrFetchr().fetchContents()
+        flickrLiveData.observe(
+            this,
+            { responseString ->
+                Log.d(TAG, "Response received: $responseString")
             }
-
-            override fun onResponse(call: Call<String>, response: Response<String>) {
-                Log.d(TAG, "Response received: ${response.body()}")
-            }
-        })
+        )
     }
 
     override fun onCreateView(
