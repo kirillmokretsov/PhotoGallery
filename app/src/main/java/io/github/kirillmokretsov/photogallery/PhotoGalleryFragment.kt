@@ -1,6 +1,7 @@
 package io.github.kirillmokretsov.photogallery
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,6 +36,16 @@ class PhotoGalleryFragment : Fragment() {
         photoRecyclerView.layoutManager = GridLayoutManager(context, 3)
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        photoGalleryViewModel.galleryItemLiveData.observe(
+            viewLifecycleOwner,
+            { galleryItems ->
+                Log.d(TAG, "Have gallery items from ViewModel $galleryItems")
+            }
+        )
     }
 
     companion object {
