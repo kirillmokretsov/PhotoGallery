@@ -44,6 +44,7 @@ class FlickrFetchr {
                 galleryItems = galleryItems.filterNot {
                     it.url.isBlank()
                 }
+                responseLiveData.value = galleryItems
             }
         })
 
