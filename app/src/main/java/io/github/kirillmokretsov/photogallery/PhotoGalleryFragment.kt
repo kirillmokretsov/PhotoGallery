@@ -25,4 +25,8 @@ class PhotoGalleryFragment : Fragment() {
         return view
     }
 
+    companion object {
+        fun newInstance() = PhotoGalleryFragment()
+    }
+
 }
