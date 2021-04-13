@@ -94,6 +94,7 @@ class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener
         override fun onBindViewHolder(holder: PhotoHolder, position: Int) {
             val galleryItem = getItem(position)
             if (galleryItem != null) {
+                thumbnailDownloader.queueThumbnail(holder, galleryItem.url)
                 holder.bindDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.example) ?: ColorDrawable())
             }
         }
