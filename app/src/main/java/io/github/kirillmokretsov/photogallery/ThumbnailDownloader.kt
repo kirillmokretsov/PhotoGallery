@@ -3,6 +3,7 @@ package io.github.kirillmokretsov.photogallery
 import android.annotation.SuppressLint
 import android.os.Handler
 import android.os.HandlerThread
+import android.os.Looper
 import android.os.Message
 import android.util.Log
 import androidx.lifecycle.Lifecycle
@@ -36,12 +37,15 @@ class ThumbnailDownloader<in T> : HandlerThread(TAG), LifecycleObserver {
 
     @SuppressLint("HandlerLeak")
     override fun onLooperPrepared() {
-        requestHandler = object : Handler() {
+        requestHandler = object : Handler(Looper.getMainLooper()) {
             override fun handleMessage(msg: Message) {
                 if (msg.what == MESSAGE_DOWNLOAD) {
-                    val target = msg.obj as T
-                    Log.i(TAG, "Got a request for URL: ${requestMap[target]}")
-                    handleRequest(target)
+                    val target = msg.obj
+                    if (target.javaClass == PhotoGalleryFragment.PhotoHolder::class.java) {
+                        Log.i(TAG, "Got a request for URL: ${requestMap[target]}")
+                        @Suppress("UNCHECKED_CAST")
+                        handleRequest(target)
+                    }
                 }
             }
         }
@@ -58,9 +62,11 @@ class ThumbnailDownloader<in T> : HandlerThread(TAG), LifecycleObserver {
         requestHandler.obtainMessage(MESSAGE_DOWNLOAD, target).sendToTarget()
     }
 
-    private fun handleRequest(target: T) {
-        val url = requestMap[target] ?: return
-        val bitmap = flickrFetchr.fetchPhoto(url) ?: return
+    private fun handleRequest(target: Any) {
+        if (target == PhotoGalleryFragment.PhotoHolder::class.java) {
+            val url = requestMap[target] ?: return
+            val bitmap = flickrFetchr.fetchPhoto(url) ?: return
+        } else return
     }
 
 }
