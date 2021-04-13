@@ -41,10 +41,10 @@ class PhotoGalleryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        photoGalleryViewModel.galleryItemLiveData.observe(
+        photoGalleryViewModel.galleryItemPagedList.observe(
             viewLifecycleOwner,
             { galleryItems ->
-                photoRecyclerView.adapter = PhotoAdapter(galleryItems)
+                Log.d(TAG, "Size of galleryItems is ${galleryItems.loadedCount}")
             }
         )
     }
