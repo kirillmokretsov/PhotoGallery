@@ -2,9 +2,11 @@ package io.github.kirillmokretsov.photogallery
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -14,10 +16,11 @@ import androidx.recyclerview.widget.RecyclerView
 
 private const val TAG = "PhotoGalleryFragment"
 
-class PhotoGalleryFragment : Fragment() {
+class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener {
 
     private lateinit var photoGalleryViewModel: PhotoGalleryViewModel
     private lateinit var photoRecyclerView: RecyclerView
+    private var spanCountHasBeenSet = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +42,7 @@ class PhotoGalleryFragment : Fragment() {
             photoRecyclerView.layoutManager = GridLayoutManager(context, 3)
         else
             photoRecyclerView.layoutManager = GridLayoutManager(context, 6)
-
+        photoRecyclerView.viewTreeObserver.addOnGlobalLayoutListener(this)
 
 
         return view
@@ -78,6 +81,16 @@ class PhotoGalleryFragment : Fragment() {
 
     companion object {
         fun newInstance() = PhotoGalleryFragment()
+    }
+
+    override fun onGlobalLayout() {
+        if (!spanCountHasBeenSet) {
+            val width = resources.configuration.screenWidthDp
+            val spanCount = width.div(100)
+            Log.d(TAG, "params.width = $width; span count = $spanCount")
+            photoRecyclerView.layoutManager = GridLayoutManager(context, spanCount)
+            spanCountHasBeenSet = true
+        }
     }
 
 }
