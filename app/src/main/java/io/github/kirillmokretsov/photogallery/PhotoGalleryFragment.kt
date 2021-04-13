@@ -1,12 +1,14 @@
 package io.github.kirillmokretsov.photogallery
 
 import android.content.res.Configuration
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -60,20 +62,27 @@ class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener
         )
     }
 
-    private class PhotoHolder(itemTextView: TextView) : RecyclerView.ViewHolder(itemTextView) {
-        val bindTitle: (CharSequence) -> Unit = itemTextView::setText
+    private class PhotoHolder(itemImageView: ImageView) : RecyclerView.ViewHolder(itemImageView) {
+        val bindDrawable: (Drawable) -> Unit = itemImageView::setImageDrawable
     }
 
-    private class PhotoAdapter :
+    private inner class PhotoAdapter :
         PagedListAdapter<GalleryItem, PhotoHolder>(GalleryItem.itemCallback) {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoHolder =
-            PhotoHolder(TextView(parent.context))
+            PhotoHolder(
+                layoutInflater.inflate(
+                    R.layout.list_item_gallery,
+                    parent,
+                    false
+                ) as ImageView
+            )
 
         override fun onBindViewHolder(holder: PhotoHolder, position: Int) {
             val galleryItem = getItem(position)
             if (galleryItem != null) {
-                holder.bindTitle(galleryItem.title)
+                //TODO: bindDrawable
+//                holder.bindTitle(galleryItem.title)
             }
         }
 
