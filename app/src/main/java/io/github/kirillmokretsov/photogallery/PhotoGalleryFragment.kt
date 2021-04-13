@@ -24,6 +24,7 @@ class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener
 
     private lateinit var photoGalleryViewModel: PhotoGalleryViewModel
     private lateinit var photoRecyclerView: RecyclerView
+    private lateinit var thumbnailDownloader: ThumbnailDownloader<PhotoHolder>
     private var spanCountHasBeenSet = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +35,9 @@ class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener
         photoGalleryViewModel =
             ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
                 .get(PhotoGalleryViewModel::class.java)
+
+        thumbnailDownloader = ThumbnailDownloader()
+        lifecycle.addObserver(thumbnailDownloader)
     }
 
     override fun onCreateView(
