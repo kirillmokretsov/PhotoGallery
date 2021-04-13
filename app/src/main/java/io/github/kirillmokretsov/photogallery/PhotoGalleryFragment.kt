@@ -2,8 +2,6 @@ package io.github.kirillmokretsov.photogallery
 
 import android.content.res.Configuration
 import android.os.Bundle
-import android.provider.ContactsContract
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -63,7 +61,7 @@ class PhotoGalleryFragment : Fragment() {
         val bindTitle: (CharSequence) -> Unit = itemTextView::setText
     }
 
-    private class PhotoAdapter() :
+    private class PhotoAdapter :
         PagedListAdapter<GalleryItem, PhotoHolder>(GalleryItem.itemCallback) {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoHolder =

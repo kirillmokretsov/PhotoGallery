@@ -1,3 +1,5 @@
+@file:Suppress("SpellCheckingInspection")
+
 package io.github.kirillmokretsov.photogallery
 
 import androidx.test.platform.app.InstrumentationRegistry

@@ -10,7 +10,6 @@ import java.util.concurrent.Executors
 class PhotoGalleryViewModel : ViewModel() {
 
     private val galleryItemDataSourceFactory = GalleryItemDataSourceFactory(FlickrApi.newInstance())
-    private val galleryItemDataSourceLiveData = galleryItemDataSourceFactory.mutableLiveData
     private val config = PagedList.Config.Builder()
         .setEnablePlaceholders(true)
         .setInitialLoadSizeHint(30)
