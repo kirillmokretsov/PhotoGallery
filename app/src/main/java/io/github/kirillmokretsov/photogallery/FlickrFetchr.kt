@@ -14,18 +14,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 
 private const val TAG = "FlickrFetch"
 
-class FlickrFetchr {
-
-    private val flickrApi: FlickrApi
-
-    init {
-        val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl("https://api.flickr.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        flickrApi = retrofit.create(FlickrApi::class.java)
-    }
+class FlickrFetchr(private val flickrApi: FlickrApi) {
 
     fun fetchPhotos(): LiveData<List<GalleryItem>> {
         val responseLiveData: MutableLiveData<List<GalleryItem>> = MutableLiveData()
