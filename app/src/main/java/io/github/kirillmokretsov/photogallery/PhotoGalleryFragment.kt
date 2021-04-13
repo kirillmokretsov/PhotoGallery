@@ -43,7 +43,7 @@ class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener
                 val drawable = BitmapDrawable(resources, bitmap)
                 photoHolder.bindDrawable(drawable)
             }
-        lifecycle.addObserver(thumbnailDownloader)
+        lifecycle.addObserver(thumbnailDownloader.fragmentLifecycleObserver)
     }
 
     override fun onCreateView(
@@ -51,6 +51,9 @@ class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        viewLifecycleOwner.lifecycle.addObserver(
+            thumbnailDownloader.viewLifecyclerObserver
+        )
         val view = inflater.inflate(R.layout.fragment_photo_gallery, container, false)
 
         photoRecyclerView = view.findViewById(R.id.photo_recycler_view)
@@ -78,7 +81,8 @@ class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener
 
     override fun onDestroy() {
         super.onDestroy()
-        lifecycle.removeObserver(thumbnailDownloader)
+        lifecycle.removeObserver(thumbnailDownloader.fragmentLifecycleObserver)
+        lifecycle.removeObserver(thumbnailDownloader.viewLifecyclerObserver)
     }
 
     class PhotoHolder(itemImageView: ImageView) : RecyclerView.ViewHolder(itemImageView) {
