@@ -110,7 +110,7 @@ class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener
             if (galleryItem != null) {
                 thumbnailDownloader.queueThumbnail(holder, galleryItem.url)
                 holder.bindDrawable(
-                    ContextCompat.getDrawable(requireContext(), R.drawable.example)
+                    ContextCompat.getDrawable(requireContext(), R.drawable.empty)
                         ?: ColorDrawable()
                 )
             }
