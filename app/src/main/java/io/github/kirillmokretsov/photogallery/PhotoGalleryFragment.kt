@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -53,17 +54,18 @@ class PhotoGalleryFragment : Fragment() {
         val bindTitle: (CharSequence) -> Unit = itemTextView::setText
     }
 
-    private class PhotoAdapter(private val galleryItems: List<GalleryItem>) :
-        RecyclerView.Adapter<PhotoHolder>() {
+    private class PhotoAdapter() :
+        PagedListAdapter<GalleryItem, PhotoHolder>(GalleryItem.itemCallback) {
+
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoHolder =
             PhotoHolder(TextView(parent.context))
 
         override fun onBindViewHolder(holder: PhotoHolder, position: Int) {
-            val galleryItem = galleryItems[position]
-            holder.bindTitle(galleryItem.title)
+            val galleryItem = getItem(position)
+            if (galleryItem != null) {
+                holder.bindTitle(galleryItem.title)
+            }
         }
-
-        override fun getItemCount(): Int = galleryItems.size
 
     }
 
