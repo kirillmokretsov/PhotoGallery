@@ -1,6 +1,7 @@
 package io.github.kirillmokretsov.photogallery
 
 import android.content.res.Configuration
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.paging.PagedListAdapter
@@ -81,8 +83,7 @@ class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener
         override fun onBindViewHolder(holder: PhotoHolder, position: Int) {
             val galleryItem = getItem(position)
             if (galleryItem != null) {
-                //TODO: bindDrawable
-//                holder.bindTitle(galleryItem.title)
+                holder.bindDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.example) ?: ColorDrawable())
             }
         }
 
