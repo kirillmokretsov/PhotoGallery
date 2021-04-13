@@ -36,6 +36,16 @@ class ThumbnailDownloader<in T>(
             }
         }
 
+    val viewLifecyclerObserver: LifecycleObserver =
+        object : LifecycleObserver {
+            @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+            fun clearQueue() {
+                Log.i(TAG, "Clearing all requests from queue")
+                requestHandler.removeMessages(MESSAGE_DOWNLOAD)
+                requestMap.clear()
+            }
+        }
+
     private var hasQuit = false
     private lateinit var requestHandler: Handler
     private val requestMap = ConcurrentHashMap<T, String>()
