@@ -5,6 +5,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface FlickrApi {
 
@@ -14,10 +15,9 @@ interface FlickrApi {
                 "&format=json" +
                 "&nojsoncallback=1" +
                 "&extras=url_s" +
-                "&per_page=15" +
-                "page={id}"
+                "&per_page=15"
     )
-    fun fetchPhotos(@Path("id") page: Int): Call<FlickrResponse>
+    fun fetchPhotos(@Query("page") page: Int): Call<FlickrResponse>
 
     companion object {
         fun newInstance(): FlickrApi =
