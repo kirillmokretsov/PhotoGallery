@@ -1,16 +1,17 @@
 package io.github.kirillmokretsov.photogallery
 
 import android.content.res.Configuration
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -36,7 +37,12 @@ class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener
             ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
                 .get(PhotoGalleryViewModel::class.java)
 
-        thumbnailDownloader = ThumbnailDownloader()
+        val responseHandler = Handler()
+        thumbnailDownloader =
+            ThumbnailDownloader(responseHandler) { photoHolder, bitmap ->
+                val drawable = BitmapDrawable(resources, bitmap)
+                photoHolder.bindDrawable(drawable)
+            }
         lifecycle.addObserver(thumbnailDownloader)
     }
 
@@ -95,7 +101,10 @@ class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener
             val galleryItem = getItem(position)
             if (galleryItem != null) {
                 thumbnailDownloader.queueThumbnail(holder, galleryItem.url)
-                holder.bindDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.example) ?: ColorDrawable())
+                holder.bindDrawable(
+                    ContextCompat.getDrawable(requireContext(), R.drawable.example)
+                        ?: ColorDrawable()
+                )
             }
         }
 
