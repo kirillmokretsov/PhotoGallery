@@ -8,7 +8,10 @@ data class GalleryItem(
     var id: String = "",
     @SerializedName("url_s") var url: String = ""
 ) {
-    val itemCallback: DiffUtil.ItemCallback<GalleryItem> = CustomItemCallback()
+
+    companion object {
+        val itemCallback: DiffUtil.ItemCallback<GalleryItem> = CustomItemCallback()
+    }
 
     class CustomItemCallback : DiffUtil.ItemCallback<GalleryItem>() {
         override fun areItemsTheSame(oldItem: GalleryItem, newItem: GalleryItem): Boolean =
