@@ -1,6 +1,7 @@
 package io.github.kirillmokretsov.photogallery
 
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -45,7 +46,9 @@ class PhotoGalleryFragment : Fragment() {
         photoGalleryViewModel.galleryItemPagedList.observe(
             viewLifecycleOwner,
             { galleryItems ->
-                Log.d(TAG, "Size of galleryItems is ${galleryItems.loadedCount}")
+                val photoAdapter = PhotoAdapter()
+                photoAdapter.submitList(galleryItems)
+                photoRecyclerView.adapter = photoAdapter
             }
         )
     }
