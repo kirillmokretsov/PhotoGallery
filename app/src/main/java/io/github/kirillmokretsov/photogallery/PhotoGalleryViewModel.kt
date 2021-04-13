@@ -14,7 +14,7 @@ class PhotoGalleryViewModel : ViewModel() {
         .setEnablePlaceholders(true)
         .setInitialLoadSizeHint(30)
         .setPageSize(15)
-        .setPrefetchDistance(9)
+        .setPrefetchDistance(12)
         .build()
     private val executor = Executors.newFixedThreadPool(5)
 
