@@ -79,10 +79,14 @@ class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener
         )
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        lifecycle.removeObserver(thumbnailDownloader.viewLifecyclerObserver)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         lifecycle.removeObserver(thumbnailDownloader.fragmentLifecycleObserver)
-        lifecycle.removeObserver(thumbnailDownloader.viewLifecyclerObserver)
     }
 
     class PhotoHolder(itemImageView: ImageView) : RecyclerView.ViewHolder(itemImageView) {
