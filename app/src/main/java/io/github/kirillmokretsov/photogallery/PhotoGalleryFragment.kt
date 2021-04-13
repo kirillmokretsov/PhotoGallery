@@ -1,5 +1,6 @@
 package io.github.kirillmokretsov.photogallery
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
@@ -36,7 +37,12 @@ class PhotoGalleryFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_photo_gallery, container, false)
 
         photoRecyclerView = view.findViewById(R.id.photo_recycler_view)
-        photoRecyclerView.layoutManager = GridLayoutManager(context, 3)
+        if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
+            photoRecyclerView.layoutManager = GridLayoutManager(context, 3)
+        else
+            photoRecyclerView.layoutManager = GridLayoutManager(context, 6)
+
+
 
         return view
     }
