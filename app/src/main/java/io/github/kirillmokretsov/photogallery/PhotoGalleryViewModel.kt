@@ -40,11 +40,15 @@ class PhotoGalleryViewModel : ViewModel() {
     init {
         mutableSearchTerm.value = "planets"
         searchPagedList = Transformations.switchMap(mutableSearchTerm) { searchTerm ->
-            searchDataSourceFactory.query = searchTerm
-            LivePagedListBuilder(
-                searchDataSourceFactory,
-                config
-            ).setFetchExecutor(searchExecutor).build()
+            if (searchTerm.isBlank()) {
+                galleryItemPagedList
+            } else {
+                searchDataSourceFactory.query = searchTerm
+                LivePagedListBuilder(
+                    searchDataSourceFactory,
+                    config
+                ).setFetchExecutor(searchExecutor).build()
+            }
         }
     }
 
