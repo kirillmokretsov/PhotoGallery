@@ -48,4 +48,8 @@ class PhotoGalleryViewModel : ViewModel() {
         }
     }
 
+    fun fetchPhotos(query: String = "") {
+        mutableSearchTerm.value = query
+    }
+
 }
