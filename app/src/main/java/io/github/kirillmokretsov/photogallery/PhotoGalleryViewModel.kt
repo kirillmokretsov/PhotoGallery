@@ -15,7 +15,7 @@ class PhotoGalleryViewModel : ViewModel() {
     private val flickrFetchr = FlickrFetchr(flickrApi)
     private val mutableSearchTerm = MutableLiveData<String>()
 
-    private val galleryItemDataSourceFactory = GalleryItemDataSourceFactory(flickrApi)
+    private val galleryItemDataSourceFactory = GalleryItemDataSourceFactory(flickrFetchr)
     private val config = PagedList.Config.Builder()
         .setEnablePlaceholders(true)
         .setInitialLoadSizeHint(30)
@@ -29,7 +29,7 @@ class PhotoGalleryViewModel : ViewModel() {
             config
         ).setFetchExecutor(galleryItemExecutor).build()
 
-    private val searchDataSourceFactory = SearchDataSourceFactory(flickrApi, "planets")
+    private val searchDataSourceFactory = SearchDataSourceFactory(flickrFetchr, "planets")
     private val searchExecutor = Executors.newFixedThreadPool(5)
     var searchPagedList: LiveData<PagedList<GalleryItem>> =
         LivePagedListBuilder(
