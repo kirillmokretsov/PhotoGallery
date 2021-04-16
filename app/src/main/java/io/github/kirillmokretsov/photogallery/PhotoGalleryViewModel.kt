@@ -29,7 +29,7 @@ class PhotoGalleryViewModel : ViewModel() {
             config
         ).setFetchExecutor(galleryItemExecutor).build()
 
-    private val searchDataSourceFactory = SearchDataSourceFactory(flickrFetchr, "planets")
+    private val searchDataSourceFactory = SearchDataSourceFactory(flickrFetchr, "")
     private val searchExecutor = Executors.newFixedThreadPool(5)
     var searchPagedList: LiveData<PagedList<GalleryItem>> =
         LivePagedListBuilder(
@@ -38,7 +38,7 @@ class PhotoGalleryViewModel : ViewModel() {
         ).setFetchExecutor(searchExecutor).build()
 
     init {
-        mutableSearchTerm.value = "planets"
+        mutableSearchTerm.value = ""
         searchPagedList = Transformations.switchMap(mutableSearchTerm) { searchTerm ->
             if (searchTerm.isBlank()) {
                 galleryItemPagedList
