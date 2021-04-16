@@ -14,14 +14,19 @@ private const val TAG = "FlickrFetch"
 
 class FlickrFetchr(private val flickrApi: FlickrApi) {
 
-    init {
+    fun fetchPhotos(page: Int, callback: PageKeyedDataSource.LoadInitialCallback<Int, GalleryItem>) {
+        fetchPhotoMetadata(page, callback, flickrApi.fetchPhotos(page))
     }
 
-    fun fetchPhotos(
+    fun fetchPhotos(page: Int, callback: PageKeyedDataSource.LoadCallback<Int, GalleryItem>) {
+        fetchPhotoMetadata(page, callback, flickrApi.fetchPhotos(page))
+    }
+
+    fun fetchPhotoMetadata(
         page: Int,
-        callback: PageKeyedDataSource.LoadInitialCallback<Int, GalleryItem>
+        callback: PageKeyedDataSource.LoadInitialCallback<Int, GalleryItem>,
+        flickrRequest: Call<FlickrResponse>
     ) {
-        val flickrRequest: Call<FlickrResponse> = flickrApi.fetchPhotos(page)
 
         flickrRequest.enqueue(object : Callback<FlickrResponse> {
             override fun onFailure(call: Call<FlickrResponse>, t: Throwable) {
@@ -44,12 +49,11 @@ class FlickrFetchr(private val flickrApi: FlickrApi) {
         })
     }
 
-    fun fetchPhotos(
+    fun fetchPhotoMetadata(
         page: Int,
-        callback: PageKeyedDataSource.LoadCallback<Int, GalleryItem>
+        callback: PageKeyedDataSource.LoadCallback<Int, GalleryItem>,
+        flickrRequest: Call<FlickrResponse>
     ) {
-        val flickrRequest: Call<FlickrResponse> = flickrApi.fetchPhotos(page)
-
         flickrRequest.enqueue(object : Callback<FlickrResponse> {
             override fun onFailure(call: Call<FlickrResponse>, t: Throwable) {
                 Log.e(TAG, "Failed to fetch photos", t)
