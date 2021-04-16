@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.paging.PageKeyedDataSource
 import io.github.kirillmokretsov.photogallery.api.FlickrApi
 import io.github.kirillmokretsov.photogallery.api.FlickrResponse
+import io.github.kirillmokretsov.photogallery.api.PhotoInterceptor
+import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -11,6 +13,10 @@ import retrofit2.Response
 private const val TAG = "FlickrFetch"
 
 class FlickrFetchr(private val flickrApi: FlickrApi) {
+
+    init {
+        val client = OkHttpClient.Builder().addInterceptor(PhotoInterceptor()).build()
+    }
 
     fun fetchPhotos(
         page: Int,
