@@ -92,6 +92,16 @@ class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener
         }
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_item_clear -> {
+                photoGalleryViewModel.fetchPhotos("")
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     class PhotoHolder(private val itemImageView: ImageView) : RecyclerView.ViewHolder(itemImageView) {
         fun bindGalleryItem(galleryItem: GalleryItem) {
             Picasso.get()
