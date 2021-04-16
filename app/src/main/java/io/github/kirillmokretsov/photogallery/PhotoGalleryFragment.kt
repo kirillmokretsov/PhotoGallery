@@ -13,6 +13,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.squareup.picasso.Picasso
 
 private const val TAG = "PhotoGalleryFragment"
@@ -33,6 +35,8 @@ class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener
             ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
                 .get(PhotoGalleryViewModel::class.java)
 
+        val workRequest = OneTimeWorkRequest.Builder(PollWorker::class.java).build()
+        WorkManager.getInstance(requireContext()).enqueue(workRequest)
     }
 
     override fun onCreateView(
@@ -83,7 +87,8 @@ class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener
                     if (query != null) {
                         photoGalleryViewModel.fetchPhotos(query)
                     }
-                    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    val imm =
+                        context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(view?.windowToken, 0)
                     return true
                 }
@@ -107,7 +112,8 @@ class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener
         }
     }
 
-    class PhotoHolder(private val itemImageView: ImageView) : RecyclerView.ViewHolder(itemImageView) {
+    class PhotoHolder(private val itemImageView: ImageView) :
+        RecyclerView.ViewHolder(itemImageView) {
         fun bindGalleryItem(galleryItem: GalleryItem) {
             Picasso.get()
                 .load(galleryItem.url)
