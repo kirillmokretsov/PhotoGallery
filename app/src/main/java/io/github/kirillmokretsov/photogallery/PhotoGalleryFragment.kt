@@ -3,10 +3,7 @@ package io.github.kirillmokretsov.photogallery
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.ViewTreeObserver
+import android.view.*
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -27,6 +24,7 @@ class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener
         super.onCreate(savedInstanceState)
 
         retainInstance = true // for more simple configuration
+        setHasOptionsMenu(true)
 
         photoGalleryViewModel =
             ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
@@ -54,7 +52,7 @@ class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        photoGalleryViewModel.galleryItemPagedList.observe(
+        photoGalleryViewModel.searchPagedList.observe(
             viewLifecycleOwner,
             { galleryItems ->
                 val photoAdapter = PhotoAdapter()
@@ -62,6 +60,11 @@ class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener
                 photoRecyclerView.adapter = photoAdapter
             }
         )
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.fragment_photo_gallery, menu)
     }
 
     class PhotoHolder(private val itemImageView: ImageView) : RecyclerView.ViewHolder(itemImageView) {
