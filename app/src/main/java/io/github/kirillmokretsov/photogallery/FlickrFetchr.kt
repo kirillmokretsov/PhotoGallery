@@ -4,8 +4,6 @@ import android.util.Log
 import androidx.paging.PageKeyedDataSource
 import io.github.kirillmokretsov.photogallery.api.FlickrApi
 import io.github.kirillmokretsov.photogallery.api.FlickrResponse
-import io.github.kirillmokretsov.photogallery.api.PhotoInterceptor
-import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -14,7 +12,10 @@ private const val TAG = "FlickrFetch"
 
 class FlickrFetchr(private val flickrApi: FlickrApi) {
 
-    fun fetchPhotos(page: Int, callback: PageKeyedDataSource.LoadInitialCallback<Int, GalleryItem>) {
+    fun fetchPhotos(
+        page: Int,
+        callback: PageKeyedDataSource.LoadInitialCallback<Int, GalleryItem>
+    ) {
         fetchPhotoMetadata(page, callback, flickrApi.fetchPhotos(page))
     }
 
@@ -22,7 +23,23 @@ class FlickrFetchr(private val flickrApi: FlickrApi) {
         fetchPhotoMetadata(page, callback, flickrApi.fetchPhotos(page))
     }
 
-    fun fetchPhotoMetadata(
+    fun searchPhotos(
+        page: Int,
+        callback: PageKeyedDataSource.LoadInitialCallback<Int, GalleryItem>,
+        query: String
+    ) {
+        fetchPhotoMetadata(page, callback, flickrApi.searchPhotos(query))
+    }
+
+    fun searchPhotos(
+        page: Int,
+        callback: PageKeyedDataSource.LoadCallback<Int, GalleryItem>,
+        query: String
+    ) {
+        fetchPhotoMetadata(page, callback, flickrApi.searchPhotos(query))
+    }
+
+    private fun fetchPhotoMetadata(
         page: Int,
         callback: PageKeyedDataSource.LoadInitialCallback<Int, GalleryItem>,
         flickrRequest: Call<FlickrResponse>
@@ -49,7 +66,7 @@ class FlickrFetchr(private val flickrApi: FlickrApi) {
         })
     }
 
-    fun fetchPhotoMetadata(
+    private fun fetchPhotoMetadata(
         page: Int,
         callback: PageKeyedDataSource.LoadCallback<Int, GalleryItem>,
         flickrRequest: Call<FlickrResponse>
