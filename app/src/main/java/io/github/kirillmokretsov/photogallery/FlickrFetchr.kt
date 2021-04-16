@@ -28,6 +28,7 @@ class FlickrFetchr(private val flickrApi: FlickrApi) {
         callback: PageKeyedDataSource.LoadInitialCallback<Int, GalleryItem>,
         query: String
     ) {
+        Log.d(TAG, "searchPhotos() page: $page; query: $query")
         fetchPhotoMetadata(page, callback, flickrApi.searchPhotos(query))
     }
 
@@ -36,6 +37,7 @@ class FlickrFetchr(private val flickrApi: FlickrApi) {
         callback: PageKeyedDataSource.LoadCallback<Int, GalleryItem>,
         query: String
     ) {
+        Log.d(TAG, "searchPhotos() page: $page; query: $query")
         fetchPhotoMetadata(page, callback, flickrApi.searchPhotos(query))
     }
 
