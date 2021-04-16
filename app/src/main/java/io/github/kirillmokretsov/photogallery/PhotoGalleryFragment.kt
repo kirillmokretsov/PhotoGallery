@@ -45,6 +45,7 @@ class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener
             photoRecyclerView.layoutManager = GridLayoutManager(context, 3)
         else
             photoRecyclerView.layoutManager = GridLayoutManager(context, 6)
+        spanCountHasBeenSet = false
         photoRecyclerView.viewTreeObserver.addOnGlobalLayoutListener(this)
 
 
