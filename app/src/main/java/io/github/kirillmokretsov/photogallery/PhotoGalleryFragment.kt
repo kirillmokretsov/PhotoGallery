@@ -13,6 +13,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.work.Constraints
+import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.squareup.picasso.Picasso
@@ -35,7 +37,12 @@ class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener
             ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
                 .get(PhotoGalleryViewModel::class.java)
 
-        val workRequest = OneTimeWorkRequest.Builder(PollWorker::class.java).build()
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.UNMETERED)
+            .build()
+        val workRequest = OneTimeWorkRequest.Builder(PollWorker::class.java)
+            .setConstraints(constraints)
+            .build()
         WorkManager.getInstance(requireContext()).enqueue(workRequest)
     }
 
