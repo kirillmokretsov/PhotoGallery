@@ -23,7 +23,7 @@ class PhotoGalleryViewModel : ViewModel() {
         .setPrefetchDistance(12)
         .build()
     private val galleryItemExecutor = Executors.newFixedThreadPool(5)
-    val galleryItemPagedList: LiveData<PagedList<GalleryItem>> =
+    private val galleryItemPagedList: LiveData<PagedList<GalleryItem>> =
         LivePagedListBuilder(
             galleryItemDataSourceFactory,
             config
