@@ -1,5 +1,6 @@
 package io.github.kirillmokretsov.photogallery.api
 
+import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -19,12 +20,17 @@ interface FlickrApi {
     fun fetchPhotos(@Query("page") page: Int): Call<FlickrResponse>
 
     companion object {
-        fun newInstance(): FlickrApi =
-            Retrofit.Builder()
+        fun newInstance(): FlickrApi {
+
+            val client = OkHttpClient.Builder().addInterceptor(PhotoInterceptor()).build()
+
+            return Retrofit.Builder()
                 .baseUrl("https://api.flickr.com/")
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
                 .build()
                 .create(FlickrApi::class.java)
+        }
     }
 
 }

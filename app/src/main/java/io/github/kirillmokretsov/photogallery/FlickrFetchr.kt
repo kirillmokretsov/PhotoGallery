@@ -15,7 +15,6 @@ private const val TAG = "FlickrFetch"
 class FlickrFetchr(private val flickrApi: FlickrApi) {
 
     init {
-        val client = OkHttpClient.Builder().addInterceptor(PhotoInterceptor()).build()
     }
 
     fun fetchPhotos(
