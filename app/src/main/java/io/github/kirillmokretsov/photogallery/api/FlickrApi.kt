@@ -15,8 +15,11 @@ interface FlickrApi {
     )
     fun fetchPhotos(@Query("page") page: Int): Call<FlickrResponse>
 
-    @GET("services/rest?method=flickr.photos.search")
-    fun searchPhotos(@Query("text") query: String) : Call<FlickrResponse>
+    @GET(
+        "services/rest?method=flickr.photos.search" +
+                "&sort=relevance"
+    )
+    fun searchPhotos(@Query("text") query: String): Call<FlickrResponse>
 
     companion object {
         fun newInstance(): FlickrApi {
