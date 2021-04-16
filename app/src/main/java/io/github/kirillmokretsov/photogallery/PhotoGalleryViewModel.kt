@@ -56,7 +56,8 @@ class PhotoGalleryViewModel : ViewModel() {
         mutableSearchTerm.value = query
     }
 
-    fun getQuery() = mutableSearchTerm.value
+    val searchTerm: String
+        get() = mutableSearchTerm.value ?: ""
 
 
 }

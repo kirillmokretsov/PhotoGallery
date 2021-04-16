@@ -73,7 +73,7 @@ class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener
 
         searchView.apply {
 
-            setQuery(photoGalleryViewModel.getQuery(), false)
+            setQuery(photoGalleryViewModel.searchTerm, false)
 
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
