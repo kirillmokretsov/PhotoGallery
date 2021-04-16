@@ -1,6 +1,8 @@
 package io.github.kirillmokretsov.photogallery
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
@@ -10,6 +12,8 @@ import java.util.concurrent.Executors
 class PhotoGalleryViewModel : ViewModel() {
 
     private val flickrApi = FlickrApi.newInstance()
+    private val flickrFetchr = FlickrFetchr(flickrApi)
+    private val mutableSearchTerm = MutableLiveData<String>()
 
     private val galleryItemDataSourceFactory = GalleryItemDataSourceFactory(flickrApi)
     private val config = PagedList.Config.Builder()
@@ -27,10 +31,21 @@ class PhotoGalleryViewModel : ViewModel() {
 
     private val searchDataSourceFactory = SearchDataSourceFactory(flickrApi, "planets")
     private val searchExecutor = Executors.newFixedThreadPool(5)
-    val searchPagedList: LiveData<PagedList<GalleryItem>> =
+    var searchPagedList: LiveData<PagedList<GalleryItem>> =
         LivePagedListBuilder(
             searchDataSourceFactory,
             config
         ).setFetchExecutor(searchExecutor).build()
+
+    init {
+        mutableSearchTerm.value = "planets"
+        searchPagedList = Transformations.switchMap(mutableSearchTerm) { searchTerm ->
+            searchDataSourceFactory.query = searchTerm
+            LivePagedListBuilder(
+                searchDataSourceFactory,
+                config
+            ).setFetchExecutor(searchExecutor).build()
+        }
+    }
 
 }
