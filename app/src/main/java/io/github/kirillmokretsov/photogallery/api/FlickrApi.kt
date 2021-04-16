@@ -11,13 +11,12 @@ interface FlickrApi {
 
     @GET(
         "services/rest/?method=flickr.interestingness.getList" +
-                "&api_key=f056d948cffa64689b6eb4c46d46d5eb" +
-                "&format=json" +
-                "&nojsoncallback=1" +
-                "&extras=url_s" +
                 "&per_page=42"
     )
     fun fetchPhotos(@Query("page") page: Int): Call<FlickrResponse>
+
+    @GET("services/rest?method=flickr.photos.search")
+    fun searchPhotos(@Query("text") query: String) : Call<FlickrResponse>
 
     companion object {
         fun newInstance(): FlickrApi {
