@@ -14,14 +14,14 @@ class PhotoGalleryViewModel : ViewModel() {
     private val flickrApi = FlickrApi.newInstance()
     private val flickrFetchr = FlickrFetchr(flickrApi)
     private val mutableSearchTerm = MutableLiveData<String>()
-
-    private val galleryItemDataSourceFactory = GalleryItemDataSourceFactory(flickrFetchr)
     private val config = PagedList.Config.Builder()
         .setEnablePlaceholders(true)
         .setInitialLoadSizeHint(30)
         .setPageSize(15)
         .setPrefetchDistance(12)
         .build()
+
+    private val galleryItemDataSourceFactory = GalleryItemDataSourceFactory(flickrFetchr)
     private val galleryItemExecutor = Executors.newFixedThreadPool(5)
     private val galleryItemPagedList: LiveData<PagedList<GalleryItem>> =
         LivePagedListBuilder(
