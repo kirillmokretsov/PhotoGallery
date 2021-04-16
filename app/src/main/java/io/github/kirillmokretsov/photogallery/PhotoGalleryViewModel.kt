@@ -25,7 +25,7 @@ class PhotoGalleryViewModel : ViewModel() {
             config
         ).setFetchExecutor(galleryItemExecutor).build()
 
-    private val searchDataSourceFactory = SearchDataSourceFactory(flickrApi, "galaxy")
+    private val searchDataSourceFactory = SearchDataSourceFactory(flickrApi, "planets")
     private val searchExecutor = Executors.newFixedThreadPool(5)
     val searchPagedList: LiveData<PagedList<GalleryItem>> =
         LivePagedListBuilder(
