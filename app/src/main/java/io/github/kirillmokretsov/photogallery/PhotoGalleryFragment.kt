@@ -68,7 +68,7 @@ class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener
         fun bindGalleryItem(galleryItem: GalleryItem) {
             Picasso.get()
                 .load(galleryItem.url)
-                .placeholder(R.drawable.empty)
+                .placeholder(R.color.placeholder)
                 .into(itemImageView)
         }
     }
