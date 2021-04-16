@@ -9,19 +9,28 @@ import java.util.concurrent.Executors
 
 class PhotoGalleryViewModel : ViewModel() {
 
-    private val galleryItemDataSourceFactory = GalleryItemDataSourceFactory(FlickrApi.newInstance())
+    private val flickrApi = FlickrApi.newInstance()
+
+    private val galleryItemDataSourceFactory = GalleryItemDataSourceFactory(flickrApi)
     private val config = PagedList.Config.Builder()
         .setEnablePlaceholders(true)
         .setInitialLoadSizeHint(30)
         .setPageSize(15)
         .setPrefetchDistance(12)
         .build()
-    private val executor = Executors.newFixedThreadPool(5)
-
+    private val galleryItemExecutor = Executors.newFixedThreadPool(5)
     val galleryItemPagedList: LiveData<PagedList<GalleryItem>> =
         LivePagedListBuilder(
             galleryItemDataSourceFactory,
             config
-        ).setFetchExecutor(executor).build()
+        ).setFetchExecutor(galleryItemExecutor).build()
+
+    private val searchDataSourceFactory = SearchDataSourceFactory(flickrApi, "galaxy")
+    private val searchExecutor = Executors.newFixedThreadPool(5)
+    val searchPagedList: LiveData<PagedList<GalleryItem>> =
+        LivePagedListBuilder(
+            searchDataSourceFactory,
+            config
+        ).setFetchExecutor(searchExecutor).build()
 
 }
