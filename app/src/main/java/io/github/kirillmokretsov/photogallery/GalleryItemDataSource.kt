@@ -1,12 +1,9 @@
 package io.github.kirillmokretsov.photogallery
 
 import androidx.paging.PageKeyedDataSource
-import io.github.kirillmokretsov.photogallery.api.FlickrApi
 
-class GalleryItemDataSource(flickrApi: FlickrApi) :
+class GalleryItemDataSource(private val flickrFetchr: FlickrFetchr) :
     PageKeyedDataSource<Int, GalleryItem>() {
-
-    private val flickrFetchr = FlickrFetchr(flickrApi)
 
     override fun loadInitial(
         params: LoadInitialParams<Int>,

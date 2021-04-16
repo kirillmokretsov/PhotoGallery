@@ -16,7 +16,36 @@ class FlickrFetchr(private val flickrApi: FlickrApi) {
         page: Int,
         callback: PageKeyedDataSource.LoadInitialCallback<Int, GalleryItem>
     ) {
-        val flickrRequest: Call<FlickrResponse> = flickrApi.fetchPhotos(page)
+        fetchPhotoMetadata(page, callback, flickrApi.fetchPhotos(page))
+    }
+
+    fun fetchPhotos(page: Int, callback: PageKeyedDataSource.LoadCallback<Int, GalleryItem>) {
+        fetchPhotoMetadata(page, callback, flickrApi.fetchPhotos(page))
+    }
+
+    fun searchPhotos(
+        page: Int,
+        callback: PageKeyedDataSource.LoadInitialCallback<Int, GalleryItem>,
+        query: String
+    ) {
+        Log.d(TAG, "searchPhotos() page: $page; query: $query")
+        fetchPhotoMetadata(page, callback, flickrApi.searchPhotos(query, page))
+    }
+
+    fun searchPhotos(
+        page: Int,
+        callback: PageKeyedDataSource.LoadCallback<Int, GalleryItem>,
+        query: String
+    ) {
+        Log.d(TAG, "searchPhotos() page: $page; query: $query")
+        fetchPhotoMetadata(page, callback, flickrApi.searchPhotos(query, page))
+    }
+
+    private fun fetchPhotoMetadata(
+        page: Int,
+        callback: PageKeyedDataSource.LoadInitialCallback<Int, GalleryItem>,
+        flickrRequest: Call<FlickrResponse>
+    ) {
 
         flickrRequest.enqueue(object : Callback<FlickrResponse> {
             override fun onFailure(call: Call<FlickrResponse>, t: Throwable) {
@@ -39,12 +68,11 @@ class FlickrFetchr(private val flickrApi: FlickrApi) {
         })
     }
 
-    fun fetchPhotos(
+    private fun fetchPhotoMetadata(
         page: Int,
-        callback: PageKeyedDataSource.LoadCallback<Int, GalleryItem>
+        callback: PageKeyedDataSource.LoadCallback<Int, GalleryItem>,
+        flickrRequest: Call<FlickrResponse>
     ) {
-        val flickrRequest: Call<FlickrResponse> = flickrApi.fetchPhotos(page)
-
         flickrRequest.enqueue(object : Callback<FlickrResponse> {
             override fun onFailure(call: Call<FlickrResponse>, t: Throwable) {
                 Log.e(TAG, "Failed to fetch photos", t)
