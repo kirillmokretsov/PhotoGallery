@@ -52,4 +52,7 @@ class PhotoGalleryViewModel : ViewModel() {
         mutableSearchTerm.value = query
     }
 
+    fun getQuery() = mutableSearchTerm.value
+
+
 }

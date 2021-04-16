@@ -71,6 +71,9 @@ class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener
         val searchView = searchItem.actionView as SearchView
 
         searchView.apply {
+
+            setQuery(photoGalleryViewModel.getQuery(), false)
+
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     Log.d(TAG, "QueryTextSubmit: $query")
