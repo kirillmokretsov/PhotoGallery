@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 
 private const val TAG = "PhotoGalleryFragment"
 
@@ -89,8 +90,15 @@ class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener
         lifecycle.removeObserver(thumbnailDownloader.fragmentLifecycleObserver)
     }
 
-    class PhotoHolder(itemImageView: ImageView) : RecyclerView.ViewHolder(itemImageView) {
+    class PhotoHolder(private val itemImageView: ImageView) : RecyclerView.ViewHolder(itemImageView) {
         val bindDrawable: (Drawable) -> Unit = itemImageView::setImageDrawable
+
+        fun bindGalleryItem(galleryItem: GalleryItem) {
+            Picasso.get()
+                .load(galleryItem.url)
+                .placeholder(R.drawable.empty)
+                .into(itemImageView)
+        }
     }
 
     private inner class PhotoAdapter :
@@ -108,11 +116,7 @@ class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener
         override fun onBindViewHolder(holder: PhotoHolder, position: Int) {
             val galleryItem = getItem(position)
             if (galleryItem != null) {
-                thumbnailDownloader.queueThumbnail(holder, galleryItem.url)
-                holder.bindDrawable(
-                    ContextCompat.getDrawable(requireContext(), R.drawable.empty)
-                        ?: ColorDrawable()
-                )
+                holder.bindGalleryItem(galleryItem)
             }
         }
 
