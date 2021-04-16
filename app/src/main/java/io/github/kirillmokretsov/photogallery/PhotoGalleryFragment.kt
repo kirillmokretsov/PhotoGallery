@@ -40,7 +40,7 @@ class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener
         // TODO: fix, not working
         // Connected to Wi-Fi but android thinks it is metered
         val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.UNMETERED)
+//            .setRequiredNetworkType(NetworkType.UNMETERED)
             .build()
         val workRequest = OneTimeWorkRequest.Builder(PollWorker::class.java)
             .setConstraints(constraints)
