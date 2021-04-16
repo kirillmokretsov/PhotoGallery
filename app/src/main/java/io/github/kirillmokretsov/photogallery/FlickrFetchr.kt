@@ -29,7 +29,7 @@ class FlickrFetchr(private val flickrApi: FlickrApi) {
         query: String
     ) {
         Log.d(TAG, "searchPhotos() page: $page; query: $query")
-        fetchPhotoMetadata(page, callback, flickrApi.searchPhotos(query))
+        fetchPhotoMetadata(page, callback, flickrApi.searchPhotos(query, page))
     }
 
     fun searchPhotos(
@@ -38,7 +38,7 @@ class FlickrFetchr(private val flickrApi: FlickrApi) {
         query: String
     ) {
         Log.d(TAG, "searchPhotos() page: $page; query: $query")
-        fetchPhotoMetadata(page, callback, flickrApi.searchPhotos(query))
+        fetchPhotoMetadata(page, callback, flickrApi.searchPhotos(query, page))
     }
 
     private fun fetchPhotoMetadata(
