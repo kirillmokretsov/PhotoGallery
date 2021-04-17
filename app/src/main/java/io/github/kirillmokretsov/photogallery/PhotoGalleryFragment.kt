@@ -93,6 +93,10 @@ class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     Log.d(TAG, "QueryTextSubmit: $query")
+                    if (query?.isEmpty() == true) {
+                        photoGalleryViewModel.fetchPhotos("")
+                        return true
+                    }
                     if (query != null) {
                         photoGalleryViewModel.fetchPhotos(query)
                     }
@@ -104,6 +108,10 @@ class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener
 
                 override fun onQueryTextChange(newText: String?): Boolean {
                     Log.d(TAG, "QueryTextChange: $newText")
+                    if (query?.isEmpty() == true) {
+                        photoGalleryViewModel.fetchPhotos("")
+                        return true
+                    }
                     return false
                 }
 
