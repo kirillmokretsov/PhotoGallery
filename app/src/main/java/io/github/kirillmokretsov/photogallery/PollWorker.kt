@@ -12,9 +12,15 @@ class PollWorker(val context: Context, workerParams: WorkerParameters) :
     Worker(context, workerParams) {
     override fun doWork(): Result {
         val lastResultId = QueryPreferences.getLastResultId(context)
-        val items: List<GalleryItem> =
-            FlickrFetchr(FlickrApi.newInstance()).fetchPhotosRequest(1).execute()
-                .body()?.photos?.galleryItems ?: emptyList()
+        val items: List<GalleryItem>
+        try {
+            items =
+                FlickrFetchr(FlickrApi.newInstance()).fetchPhotosRequest(1).execute()
+                    .body()?.photos?.galleryItems ?: emptyList()
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to get items", e)
+            return Result.failure()
+        }
 
         if (items.isEmpty())
             return Result.success()
