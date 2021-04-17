@@ -1,6 +1,7 @@
 package io.github.kirillmokretsov.photogallery
 
 import android.content.Context
+import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import io.github.kirillmokretsov.photogallery.api.FlickrApi
@@ -14,6 +15,18 @@ class PollWorker(val context: Context, workerParams: WorkerParameters) :
         val items: List<GalleryItem> =
             FlickrFetchr(FlickrApi.newInstance()).fetchPhotosRequest(1).execute()
                 .body()?.photos?.galleryItems ?: emptyList()
+
+        if (items.isEmpty())
+            return Result.success()
+
+        val resultId = items.first().id
+        if (resultId == lastResultId) {
+            Log.i(TAG, "Got and old result: $resultId")
+        } else {
+            Log.i(TAG, "Got a new result: $resultId")
+            QueryPreferences.setLastResultId(context, resultId)
+        }
+
         return Result.success()
     }
 }
