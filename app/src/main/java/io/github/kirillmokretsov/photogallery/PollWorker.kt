@@ -11,7 +11,7 @@ import io.github.kirillmokretsov.photogallery.api.FlickrApi
 
 private const val TAG = "PollWorker"
 
-class PollWorker(val context: Context, workerParams: WorkerParameters) :
+class PollWorker(private val context: Context, workerParams: WorkerParameters) :
     Worker(context, workerParams) {
     override fun doWork(): Result {
         val lastResultId = QueryPreferences.getLastResultId(context)

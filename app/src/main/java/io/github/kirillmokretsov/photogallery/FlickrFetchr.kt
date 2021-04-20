@@ -25,7 +25,7 @@ class FlickrFetchr(private val flickrApi: FlickrApi) {
         fetchPhotoMetadata(page, callback, fetchPhotosRequest(page))
     }
 
-    fun searchPhotosRequest(query: String, page: Int): Call<FlickrResponse> = flickrApi.searchPhotos(query, page)
+    private fun searchPhotosRequest(query: String, page: Int): Call<FlickrResponse> = flickrApi.searchPhotos(query, page)
 
     fun searchPhotos(
         page: Int,
