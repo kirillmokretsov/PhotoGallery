@@ -117,6 +117,11 @@ class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener
 
             })
         }
+
+        val toggleItem = menu.findItem(R.id.menu_item_toggle_polling)
+        val isPolling = QueryPreferences.isPoling(requireContext())
+        val toggleItemTitle = if(isPolling) R.string.stop_polling else R.string.start_polling
+        toggleItem.setTitle(toggleItemTitle)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
