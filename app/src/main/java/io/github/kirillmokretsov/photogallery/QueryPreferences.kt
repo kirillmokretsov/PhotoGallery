@@ -6,12 +6,14 @@ import androidx.preference.PreferenceManager
 
 private const val PREF_STORED_QUERY = "storedQuery"
 private const val PREF_LAST_RESULT_ID = "lastResultId"
+private const val PREF_IS_POLLING = "isPoling"
 
 object QueryPreferences {
     fun getStoredQuery(context: Context): String =
         PreferenceManager.getDefaultSharedPreferences(context).getString(
             PREF_STORED_QUERY, ""
         )!!
+
     fun setStoredQuery(context: Context, queryString: String) =
         PreferenceManager.getDefaultSharedPreferences(context).edit {
             putString(PREF_STORED_QUERY, queryString)
@@ -23,5 +25,15 @@ object QueryPreferences {
     fun setLastResultId(context: Context, lastResultId: String) =
         PreferenceManager.getDefaultSharedPreferences(context).edit {
             putString(PREF_LAST_RESULT_ID, lastResultId)
+        }
+
+    fun isPoling(context: Context): Boolean =
+        PreferenceManager.getDefaultSharedPreferences(context).getBoolean(
+            PREF_IS_POLLING, false
+        )
+
+    fun setPoling(context: Context, isOn: Boolean) =
+        PreferenceManager.getDefaultSharedPreferences(context).edit {
+            putBoolean(PREF_IS_POLLING, isOn)
         }
 }
