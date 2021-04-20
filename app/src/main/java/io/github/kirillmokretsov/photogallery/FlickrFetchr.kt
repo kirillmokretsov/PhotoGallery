@@ -12,16 +12,20 @@ private const val TAG = "FlickrFetch"
 
 class FlickrFetchr(private val flickrApi: FlickrApi) {
 
+    fun fetchPhotosRequest(page: Int): Call<FlickrResponse> = flickrApi.fetchPhotos(page)
+
     fun fetchPhotos(
         page: Int,
         callback: PageKeyedDataSource.LoadInitialCallback<Int, GalleryItem>
     ) {
-        fetchPhotoMetadata(page, callback, flickrApi.fetchPhotos(page))
+        fetchPhotoMetadata(page, callback, fetchPhotosRequest(page))
     }
 
     fun fetchPhotos(page: Int, callback: PageKeyedDataSource.LoadCallback<Int, GalleryItem>) {
-        fetchPhotoMetadata(page, callback, flickrApi.fetchPhotos(page))
+        fetchPhotoMetadata(page, callback, fetchPhotosRequest(page))
     }
+
+    private fun searchPhotosRequest(query: String, page: Int): Call<FlickrResponse> = flickrApi.searchPhotos(query, page)
 
     fun searchPhotos(
         page: Int,
@@ -29,7 +33,7 @@ class FlickrFetchr(private val flickrApi: FlickrApi) {
         query: String
     ) {
         Log.d(TAG, "searchPhotos() page: $page; query: $query")
-        fetchPhotoMetadata(page, callback, flickrApi.searchPhotos(query, page))
+        fetchPhotoMetadata(page, callback, searchPhotosRequest(query, page))
     }
 
     fun searchPhotos(
@@ -38,7 +42,7 @@ class FlickrFetchr(private val flickrApi: FlickrApi) {
         query: String
     ) {
         Log.d(TAG, "searchPhotos() page: $page; query: $query")
-        fetchPhotoMetadata(page, callback, flickrApi.searchPhotos(query, page))
+        fetchPhotoMetadata(page, callback, searchPhotosRequest(query, page))
     }
 
     private fun fetchPhotoMetadata(

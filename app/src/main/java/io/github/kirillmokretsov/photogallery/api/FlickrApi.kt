@@ -1,3 +1,5 @@
+@file:Suppress("SpellCheckingInspection", "SpellCheckingInspection")
+
 package io.github.kirillmokretsov.photogallery.api
 
 import okhttp3.OkHttpClient

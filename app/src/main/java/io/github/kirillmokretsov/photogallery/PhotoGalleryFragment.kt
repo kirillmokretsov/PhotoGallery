@@ -13,9 +13,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
 import com.squareup.picasso.Picasso
+import java.util.concurrent.TimeUnit
 
 private const val TAG = "PhotoGalleryFragment"
+private const val POLL_WORK = "POLL_WORK"
 
 class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener {
 
@@ -32,7 +38,6 @@ class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener
         photoGalleryViewModel =
             ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
                 .get(PhotoGalleryViewModel::class.java)
-
     }
 
     override fun onCreateView(
@@ -80,34 +85,70 @@ class PhotoGalleryFragment : Fragment(), ViewTreeObserver.OnGlobalLayoutListener
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     Log.d(TAG, "QueryTextSubmit: $query")
+                    if (query?.isEmpty() == true) {
+                        photoGalleryViewModel.fetchPhotos("")
+                        return true
+                    }
                     if (query != null) {
                         photoGalleryViewModel.fetchPhotos(query)
                     }
-                    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    val imm =
+                        context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(view?.windowToken, 0)
                     return true
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
                     Log.d(TAG, "QueryTextChange: $newText")
+                    if (query?.isEmpty() == true) {
+                        photoGalleryViewModel.fetchPhotos("")
+                        return true
+                    }
                     return false
                 }
 
             })
         }
+
+        val toggleItem = menu.findItem(R.id.menu_item_toggle_polling)
+        val isPolling = QueryPreferences.isPoling(requireContext())
+        val toggleItemTitle = if (isPolling) R.string.stop_polling else R.string.start_polling
+        toggleItem.setTitle(toggleItemTitle)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.menu_item_clear -> {
-                photoGalleryViewModel.fetchPhotos("")
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        R.id.menu_item_clear -> {
+            photoGalleryViewModel.fetchPhotos("")
+            true
         }
+        R.id.menu_item_toggle_polling -> {
+            val isPolling = QueryPreferences.isPoling(requireContext())
+            if (isPolling) {
+                WorkManager.getInstance(requireContext()).cancelUniqueWork(POLL_WORK)
+                QueryPreferences.setPoling(requireContext(), false)
+            } else {
+                val constraints = Constraints.Builder()
+                    // TODO: android thinks it is still metered
+//                        .setRequiredNetworkType(NetworkType.UNMETERED)
+                    .build()
+                val periodicRequest =
+                    PeriodicWorkRequest.Builder(PollWorker::class.java, 15, TimeUnit.MINUTES)
+                        .setConstraints(constraints).build()
+                WorkManager.getInstance(requireContext()).enqueueUniquePeriodicWork(
+                    POLL_WORK,
+                    ExistingPeriodicWorkPolicy.KEEP,
+                    periodicRequest
+                )
+                QueryPreferences.setPoling(requireContext(), true)
+            }
+            activity?.invalidateOptionsMenu()
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 
-    class PhotoHolder(private val itemImageView: ImageView) : RecyclerView.ViewHolder(itemImageView) {
+    class PhotoHolder(private val itemImageView: ImageView) :
+        RecyclerView.ViewHolder(itemImageView) {
         fun bindGalleryItem(galleryItem: GalleryItem) {
             Picasso.get()
                 .load(galleryItem.url)
