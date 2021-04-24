@@ -34,7 +34,7 @@
             android:exported="false"
             android:permission="io.github.kirillmokretsov.photogallery.PRIVATE"
             >
-            <intent-filter>
+            <intent-filter android:priority="-999">
                 <action android:name="io.github.kirillmokretsov.photogallery.SHOW_NOTIFICATION" />
             </intent-filter>
         </receiver>
