@@ -24,7 +24,9 @@
             </intent-filter>
         </activity>
         <receiver android:name=".NotificationReceiver">
-
+            <intent-filter>
+                <action android:name="io.github.kirillmokretsov.photogallery.SHOW_NOTIFICATION" />
+            </intent-filter>
         </receiver>
     </application>
 
