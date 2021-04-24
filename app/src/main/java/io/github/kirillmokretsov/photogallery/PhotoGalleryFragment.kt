@@ -1,6 +1,7 @@
 package io.github.kirillmokretsov.photogallery
 
 import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
@@ -8,7 +9,6 @@ import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.GridLayoutManager
@@ -147,13 +147,26 @@ class PhotoGalleryFragment : VisibleFragment(), ViewTreeObserver.OnGlobalLayoutL
         else -> super.onOptionsItemSelected(item)
     }
 
-    class PhotoHolder(private val itemImageView: ImageView) :
-        RecyclerView.ViewHolder(itemImageView) {
+    inner class PhotoHolder(private val itemImageView: ImageView) :
+        RecyclerView.ViewHolder(itemImageView),
+        View.OnClickListener {
         fun bindGalleryItem(galleryItem: GalleryItem) {
+            this.galleryItem = galleryItem
             Picasso.get()
                 .load(galleryItem.url)
                 .placeholder(R.color.placeholder)
                 .into(itemImageView)
+        }
+
+        private lateinit var galleryItem: GalleryItem
+
+        init {
+            itemView.setOnClickListener(this)
+        }
+
+        override fun onClick(v: View?) {
+            val intent = Intent(Intent.ACTION_VIEW, galleryItem.photoPageUri)
+            startActivity(intent)
         }
     }
 
