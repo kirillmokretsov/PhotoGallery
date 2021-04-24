@@ -4,7 +4,13 @@
     package="io.github.kirillmokretsov.photogallery"
     >
 
+    <permission
+        android:name="io.github.kirillmokretsov.photogallery.PRIVATE"
+        android:protectionLevel="signature"
+        />
+
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="io.github.kirillmokretsov.photogallery.PRIVATE" />
 
     <application
         android:name=".PhotoGalleryApplication"
