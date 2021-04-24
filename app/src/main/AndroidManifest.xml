@@ -4,7 +4,13 @@
     package="io.github.kirillmokretsov.photogallery"
     >
 
+    <permission
+        android:name="io.github.kirillmokretsov.photogallery.PRIVATE"
+        android:protectionLevel="signature"
+        />
+
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="io.github.kirillmokretsov.photogallery.PRIVATE" />
 
     <application
         android:name=".PhotoGalleryApplication"
@@ -23,6 +29,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver
+            android:name=".NotificationReceiver"
+            android:exported="false"
+            android:permission="io.github.kirillmokretsov.photogallery.PRIVATE"
+            >
+            <intent-filter android:priority="-999">
+                <action android:name="io.github.kirillmokretsov.photogallery.SHOW_NOTIFICATION" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
